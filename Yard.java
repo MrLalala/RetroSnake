@@ -3,7 +3,8 @@ package com.snake.Gan;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -25,9 +26,11 @@ public class Yard extends Frame {
 	/**
 	 * 默认每个方格的大小
 	 */
-	private static final int BLOCK_SIZE =20;
+	static final int BLOCK_SIZE =20;
 	
-	Image offScreen = null;
+	
+	Snake s = new Snake();
+//	Image offScreen = null;
 	/**
 	 * 登录主函数
 	 */
@@ -41,6 +44,16 @@ public class Yard extends Frame {
 				System.exit(0);
 			}
 		});
+		this.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e){
+				
+			}
+			public void keyPressed(KeyEvent e) {
+				s.keyPressedEvent(e);
+			}
+		});
+		Thread thread = new Thread(new paintThread());
+		thread.start();
 	}
 	
 	/**
@@ -54,30 +67,34 @@ public class Yard extends Frame {
 			g.drawLine(BLOCK_SIZE, i*BLOCK_SIZE, COLS*(BLOCK_SIZE), i*BLOCK_SIZE);
 		for(int i = 1;i <= COLS;i++)
 			g.drawLine(BLOCK_SIZE*i, 2*BLOCK_SIZE, i*BLOCK_SIZE, ROWS*(BLOCK_SIZE));
+		s.draw(g);
 		g.setColor(c);
 	}
 	/**
 	 * 
 	 */
-//	public void update(Graphics g){
-//		
-//	}
-//	
-//	/**
-//	 * 
-//	 * @author Gan
-//	 *
-//	 */
-//
-//	private class paintThread implements Runnable{
-//		public void run() {
-//			try{
-//				Thread.sleep(50);
-//			}catch (Exception e) {
-//				System.out.print(e.getMessage());
-//			}
-//		}
-//	}
+	public void update(Graphics g){
+		s.draw(g);
+	}
+	
+	/**
+	 * 
+	 * @author Gan
+	 *
+	 */
+
+	private class paintThread implements Runnable{
+		public void run() {
+			while (true) {
+				try {
+					Thread.sleep(400);
+				} catch (Exception e) {
+					System.out.print(e.getMessage());
+				}
+				repaint();
+			}
+		}
+	}
 	
 	public static void main(String[] args) {
 		// TODO 自动生成的方法存根
