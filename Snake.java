@@ -2,7 +2,9 @@ package com.snake.Gan;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class Snake {
 	/**
@@ -12,11 +14,23 @@ public class Snake {
 	/**
 	 * 起始位置
 	 */
-	private int x,y;
+	private int headX,headY;
+	/**
+	 * 身体数组
+	 */
+	private ArrayList<Point> body = new ArrayList<>();
+	/**
+	 * 尾部位置
+	 */
 	private int tailX,tailY;
+	/**
+	 * 新的蛇的构造函数
+	 * @param x 横坐标
+	 * @param y	纵坐标
+	 */
 	public Snake(int x, int y) {
-		this.tailX = this.x = x-1;
-		this.tailY = this.y = y-2;
+		this.tailX = this.headX = x;
+		this.tailY = this.headY = y+1;
 	}
 
 	private enum Direction { L,U,R,D };
@@ -26,39 +40,39 @@ public class Snake {
 	public void keyPressedEvent(KeyEvent e){
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_RIGHT:
-			dir = Direction.R;
+			if(dir != Direction.L)
+				dir = Direction.R;
 			break;
 		case KeyEvent.VK_LEFT:
-			dir = Direction.L;
+			if(dir != Direction.R)
+				dir = Direction.L;
 			break;
 		case KeyEvent.VK_DOWN:
-			dir = Direction.D;
+			if(dir != Direction.U)
+				dir = Direction.D;
 			break;
 		case KeyEvent.VK_UP:
-			dir = Direction.U;
+			if(dir != Direction.D)
+				dir = Direction.U;
 			break;
 		}
 	}
 	
-	public void keyReleasedEvent(KeyEvent e){
-		
-	}
-	
 	public void move(){
-		tailX = this.x;
-		tailY = this.y;
+		tailX = this.headX;
+		tailY = this.headY;
 		switch (dir) {
 		case R:
-			x +=1;
+			headX +=1;
 			break;
 		case L:
-			x -=1;
+			headX -=1;
 			break;
 		case D:
-			y +=1;
+			headY +=1;
 			break;
 		case U:
-			y -=1;
+			headY -=1;
 			break;
 		}
 	}
@@ -67,7 +81,7 @@ public class Snake {
 		Color c = g.getColor();
 		move();
 		g.setColor(Color.RED);
-		g.fillRect(Yard.BLOCK_SIZE*x, Yard.BLOCK_SIZE*y, Yard.BLOCK_SIZE,Yard.BLOCK_SIZE);
+		g.fillRect(Yard.BLOCK_SIZE*headX, Yard.BLOCK_SIZE*headY, Yard.BLOCK_SIZE,Yard.BLOCK_SIZE);
 		g.setColor(Yard.COLOR);
 		g.fillRect(tailX*Yard.BLOCK_SIZE, Yard.BLOCK_SIZE*tailY, Yard.BLOCK_SIZE, Yard.BLOCK_SIZE);
 		g.setColor(c);

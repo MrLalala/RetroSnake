@@ -30,13 +30,14 @@ public class Yard extends Frame {
 	
 	static final Color COLOR = Color.gray;
 	Snake s = new Snake(5,10);
+	Egg egg = new Egg(3, 4);
 //	Image offScreen = null;
 	/**
 	 * 登录主函数
 	 */
 	public void launch(){
 		this.setLocation(100,100);
-		this.setSize((COLS+1)*(BLOCK_SIZE), (ROWS+1)*(BLOCK_SIZE));
+		this.setSize((COLS+3)*(BLOCK_SIZE), (ROWS+3)*(BLOCK_SIZE));
 		this.setVisible(true);
 		this.setBackground(COLOR);
 		this.addWindowListener(new WindowAdapter() {
@@ -63,11 +64,10 @@ public class Yard extends Frame {
 		// TODO 自动生成的方法存根
 		Color c = g.getColor();
 		g.setColor(Color.black);
-		for(int i = 1;i <= ROWS;i++)
-			g.drawLine(BLOCK_SIZE, i*BLOCK_SIZE, COLS*(BLOCK_SIZE), i*BLOCK_SIZE);
-		for(int i = 1;i <= COLS;i++)
-			g.drawLine(BLOCK_SIZE*i, 2*BLOCK_SIZE, i*BLOCK_SIZE, ROWS*(BLOCK_SIZE));
-		s.draw(g);
+		for(int i = 1;i <= ROWS+2;i++)
+			g.drawLine(BLOCK_SIZE, i*BLOCK_SIZE, (COLS+2)*(BLOCK_SIZE), i*BLOCK_SIZE);
+		for(int i = 1;i <= COLS+2;i++)
+			g.drawLine(BLOCK_SIZE*i, 2*BLOCK_SIZE, i*BLOCK_SIZE, (2+ROWS)*(BLOCK_SIZE));
 		g.setColor(c);
 	}
 	/**
@@ -75,9 +75,10 @@ public class Yard extends Frame {
 	 */
 	public void update(Graphics g){
 		s.draw(g);
-		for(int i = 1;i <= ROWS;i++)
+		egg.draw(g);
+		for(int i = 1;i <= ROWS+1;i++)
 			g.drawLine(BLOCK_SIZE, i*BLOCK_SIZE, COLS*(BLOCK_SIZE), i*BLOCK_SIZE);
-		for(int i = 1;i <= COLS;i++)
+		for(int i = 1;i <= COLS+1;i++)
 			g.drawLine(BLOCK_SIZE*i, 2*BLOCK_SIZE, i*BLOCK_SIZE, ROWS*(BLOCK_SIZE));
 	}
 	
