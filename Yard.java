@@ -9,6 +9,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
+import javax.xml.ws.handler.MessageContext.Scope;
+
 /**
  * @author Gan
  * 
@@ -35,6 +37,7 @@ public class Yard extends Frame {
 	
 	static final Color COLOR = Color.gray;
 	Snake s = new Snake(5,10);
+	Snake s2 = new Snake(4, 10);
 	Egg egg = new Egg(3, 4);
 //	Image offScreen = null;
 	/**
@@ -45,6 +48,8 @@ public class Yard extends Frame {
 		this.setSize((COLS+3)*(BLOCK_SIZE), (ROWS+3)*(BLOCK_SIZE));
 		this.setVisible(true);
 		body.add(s);
+		s.lSnake = s2;
+		s2.fSnake = s;
 		this.setBackground(COLOR);
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -52,9 +57,6 @@ public class Yard extends Frame {
 			}
 		});
 		this.addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent e){
-				
-			}
 			public void keyPressed(KeyEvent e) {
 				s.keyPressedEvent(e);
 			}
@@ -80,7 +82,18 @@ public class Yard extends Frame {
 	 * ¸üÐÂº¯Êý
 	 */
 	public void update(Graphics g){
+		//s.draw(g);
+		//s.eatFood(egg);
+//		Snake temp = s;
+//		while(temp.lSnake != null){
+//			temp.lSnake.dir = temp.oldDir;
+//			temp = temp.lSnake;
+//			temp.draw(g);
+//		}
 		s.draw(g);
+		s2.draw(g);
+		s2.setHeadX(s.getTailX());
+		s2.setHeadY(s.getTailY());
 		egg.draw(g);
 		for(int i = 1;i <= ROWS+1;i++)
 			g.drawLine(BLOCK_SIZE, i*BLOCK_SIZE, COLS*(BLOCK_SIZE), i*BLOCK_SIZE);
@@ -98,7 +111,7 @@ public class Yard extends Frame {
 		public void run() {
 			while (true) {
 				try {
-					Thread.sleep(400);
+					Thread.sleep(40);
 				} catch (Exception e) {
 					System.out.print(e.getMessage());
 				}
