@@ -7,6 +7,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 /**
  * @author Gan
@@ -14,7 +15,11 @@ import java.awt.event.WindowEvent;
  */
 public class Yard extends Frame {
 	
-	
+	ArrayList<Snake>body = new ArrayList<>();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * 院子的行数，默认值为25
 	 */
@@ -39,6 +44,7 @@ public class Yard extends Frame {
 		this.setLocation(100,100);
 		this.setSize((COLS+3)*(BLOCK_SIZE), (ROWS+3)*(BLOCK_SIZE));
 		this.setVisible(true);
+		body.add(s);
 		this.setBackground(COLOR);
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {

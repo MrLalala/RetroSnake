@@ -2,27 +2,22 @@ package com.snake.Gan;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 
 public class Snake {
-	/**
-	 * 起始长度
-	 */
-	private int length = 1;
+
+	Snake fSnake = null;
+	Snake lSnake = null;
 	/**
 	 * 起始位置
 	 */
 	private int headX,headY;
 	/**
-	 * 身体数组
-	 */
-	private ArrayList<Point> body = new ArrayList<>();
-	/**
 	 * 尾部位置
 	 */
 	private int tailX,tailY;
+	
 	/**
 	 * 新的蛇的构造函数
 	 * @param x 横坐标
@@ -32,10 +27,8 @@ public class Snake {
 		this.tailX = this.headX = x;
 		this.tailY = this.headY = y+1;
 	}
-
-	private enum Direction { L,U,R,D };
 	
-	private Direction dir = Direction.R;
+	Direction dir = Direction.R;
 	
 	public void keyPressedEvent(KeyEvent e){
 		switch (e.getKeyCode()) {
@@ -85,5 +78,9 @@ public class Snake {
 		g.setColor(Yard.COLOR);
 		g.fillRect(tailX*Yard.BLOCK_SIZE, Yard.BLOCK_SIZE*tailY, Yard.BLOCK_SIZE, Yard.BLOCK_SIZE);
 		g.setColor(c);
+	}
+	
+	public Rectangle getRect(){
+		return new Rectangle(headX, headY,Yard.BLOCK_SIZE ,Yard.BLOCK_SIZE);
 	}
 }

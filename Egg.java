@@ -2,6 +2,7 @@ package com.snake.Gan;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 public class Egg {
 	
@@ -19,4 +20,7 @@ public class Egg {
 		g.setColor(color);
 	}
 	
+	public Rectangle getRect(){
+		return new Rectangle(this.x, this.y, Yard.BLOCK_SIZE, Yard.BLOCK_SIZE);
+	}
 }
