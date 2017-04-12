@@ -12,8 +12,13 @@ public class Snake {
 	/**
 	 * ÆðÊ¼Î»ÖÃ
 	 */
-	private int x = 5,y = 10;
-	
+	private int x,y;
+	private int tailX,tailY;
+	public Snake(int x, int y) {
+		this.tailX = this.x = x-1;
+		this.tailY = this.y = y-2;
+	}
+
 	private enum Direction { L,U,R,D };
 	
 	private Direction dir = Direction.R;
@@ -40,6 +45,8 @@ public class Snake {
 	}
 	
 	public void move(){
+		tailX = this.x;
+		tailY = this.y;
 		switch (dir) {
 		case R:
 			x +=1;
@@ -60,7 +67,9 @@ public class Snake {
 		Color c = g.getColor();
 		move();
 		g.setColor(Color.RED);
-		g.fillRect(Yard.BLOCK_SIZE*(x-1), Yard.BLOCK_SIZE*(y-2), Yard.BLOCK_SIZE,Yard.BLOCK_SIZE);
+		g.fillRect(Yard.BLOCK_SIZE*x, Yard.BLOCK_SIZE*y, Yard.BLOCK_SIZE,Yard.BLOCK_SIZE);
+		g.setColor(Yard.COLOR);
+		g.fillRect(tailX*Yard.BLOCK_SIZE, Yard.BLOCK_SIZE*tailY, Yard.BLOCK_SIZE, Yard.BLOCK_SIZE);
 		g.setColor(c);
 	}
 }

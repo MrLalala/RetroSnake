@@ -28,8 +28,8 @@ public class Yard extends Frame {
 	 */
 	static final int BLOCK_SIZE =20;
 	
-	
-	Snake s = new Snake();
+	static final Color COLOR = Color.gray;
+	Snake s = new Snake(5,10);
 //	Image offScreen = null;
 	/**
 	 * 登录主函数
@@ -38,7 +38,7 @@ public class Yard extends Frame {
 		this.setLocation(100,100);
 		this.setSize((COLS+1)*(BLOCK_SIZE), (ROWS+1)*(BLOCK_SIZE));
 		this.setVisible(true);
-		this.setBackground(Color.GRAY);
+		this.setBackground(COLOR);
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
@@ -57,7 +57,7 @@ public class Yard extends Frame {
 	}
 	
 	/**
-	 * 绘图函数
+	 * 初始化绘图函数
 	 */
 	public void paint(Graphics g) {
 		// TODO 自动生成的方法存根
@@ -71,10 +71,14 @@ public class Yard extends Frame {
 		g.setColor(c);
 	}
 	/**
-	 * 
+	 * 更新函数
 	 */
 	public void update(Graphics g){
 		s.draw(g);
+		for(int i = 1;i <= ROWS;i++)
+			g.drawLine(BLOCK_SIZE, i*BLOCK_SIZE, COLS*(BLOCK_SIZE), i*BLOCK_SIZE);
+		for(int i = 1;i <= COLS;i++)
+			g.drawLine(BLOCK_SIZE*i, 2*BLOCK_SIZE, i*BLOCK_SIZE, ROWS*(BLOCK_SIZE));
 	}
 	
 	/**
