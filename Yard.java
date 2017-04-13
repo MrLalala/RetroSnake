@@ -15,6 +15,7 @@ import java.util.ArrayList;
  */
 public class Yard extends Frame {
 
+	
 	ArrayList<Snake> body = new ArrayList<>();
 	/**
 	 * 
@@ -23,11 +24,11 @@ public class Yard extends Frame {
 	/**
 	 * 院子的行数，默认值为25
 	 */
-	private static final int ROWS = 30;
+	static final int ROWS = 30;
 	/**
 	 * 院子的列数,默认值为25
 	 */
-	private static final int COLS = 40;
+	static final int COLS = 40;
 	/**
 	 * 默认每个方格的大小
 	 */
@@ -38,8 +39,8 @@ public class Yard extends Frame {
 	Snake s2 = new Snake(4, 10);
 	Snake s3 = new Snake(3, 10);
 
-	Egg egg = new Egg(7, 10);
-
+	Egg egg = new Egg(8, 10,this);
+	Egg nowFood = egg;
 	// Image offScreen = null;
 	/**
 	 * 登录主函数
@@ -48,13 +49,11 @@ public class Yard extends Frame {
 		this.setLocation(100, 100);
 		this.setSize((COLS + 3) * (BLOCK_SIZE), (ROWS + 3) * (BLOCK_SIZE));
 		this.setVisible(true);
-		body.add(s);
-		body.add(s2);
-		body.add(s3);
 		s.lSnake = s2;
 		s2.fSnake = s;
 		s2.lSnake = s3;
 		s3.fSnake = s2;
+		body.add(s);body.add(s2);body.add(s3);
 		firstSnake = s;
 		this.setBackground(COLOR);
 		this.addWindowListener(new WindowAdapter() {
@@ -97,8 +96,8 @@ public class Yard extends Frame {
 			temp.setHeadX(temp.fSnake.getTailX());
 			temp.setHeadY(temp.fSnake.getTailY());
 		}
-		firstSnake.eatFood(egg);
-		egg.draw(g);
+		firstSnake.eatFood(nowFood);
+		nowFood.draw(g);
 		drawYard(g);
 		}
 	
