@@ -3,6 +3,7 @@ package com.snake.Gan;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -32,7 +33,7 @@ public class Yard extends Frame {
 	 * 默认每个方格的大小
 	 */
 	static final int BLOCK_SIZE = 20;
-
+	static Image offScreen;
 	private boolean isGame = true;
 	private paintThread pt;
 	static final Color COLOR = Color.gray;
@@ -40,7 +41,6 @@ public class Yard extends Frame {
 	Snake s2;
 	Snake s3;
 	Egg nowFood;
-
 	/**
 	 * 登录主函数
 	 */
@@ -69,6 +69,10 @@ public class Yard extends Frame {
 			public void keyPressed(KeyEvent e) {
 				firstSnake.keyPressedEvent(e);
 				if (!isGame && (e.getKeyCode() == KeyEvent.VK_F2)) {
+					offScreen = createImage((COLS + 3) * (BLOCK_SIZE), (ROWS + 3) * (BLOCK_SIZE));
+					Graphics goff = offScreen.getGraphics();
+					goff.setColor(COLOR);
+					drawYard(goff);
 					isGame = true;
 					reBegin();
 					setBackground(COLOR);
@@ -109,6 +113,10 @@ public class Yard extends Frame {
 	 * 更新函数
 	 */
 	public void update(Graphics g) {
+		if(offScreen != null){
+			g.drawImage(offScreen, 0, 0, null);
+			offScreen = null;
+		}
 		if (!isGame)
 			return;
 		firstSnake.draw(g);
