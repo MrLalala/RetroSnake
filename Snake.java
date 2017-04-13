@@ -12,8 +12,13 @@ public class Snake {
 	/**
 	 * 起始位置
 	 */
+	private boolean eatFlag = false;
+	public void setEatFlag(boolean eatFlag) {
+		this.eatFlag = eatFlag;
+	}
+
 	private int headX,headY;
-	boolean eatFood = false;
+
 	public void setHeadY(int headY) {
 		this.headY = headY;
 	}
@@ -37,7 +42,7 @@ public class Snake {
 	/**
 	 * 移动标记
 	 */
-	private int flag = 0;
+
 	private Yard yard = null;
 	/**
 	 * 新的蛇的构造函数
@@ -85,10 +90,6 @@ public class Snake {
 	}
 	
 	public void move(){
-		if(flag!=0){
-			return; 
-		}
-			
 		tailX = this.headX;
 		tailY = this.headY;
 		switch (dir) {
@@ -114,16 +115,19 @@ public class Snake {
 		Color c = g.getColor();
 		g.setColor(Color.RED);
 		g.fillRect(Yard.BLOCK_SIZE*headX, Yard.BLOCK_SIZE*headY, Yard.BLOCK_SIZE,Yard.BLOCK_SIZE);
-		if (this.lSnake == null) {
+		if (this.lSnake == null&& !eatFlag ) {
 			g.setColor(Yard.COLOR);
 			g.fillRect(tailX * Yard.BLOCK_SIZE, Yard.BLOCK_SIZE * tailY, Yard.BLOCK_SIZE, Yard.BLOCK_SIZE);
 		}
-		move();
-		if(flag ++ == 10){
-			flag = 0;
-			if(eatFood){
-				eatFood = false;
+		if(!eatFlag)
+			move();
+		else{
+			if(this.fSnake == null){
+				for(int i = 0;i<yard.body.size();i++){
+					yard.body.get(i).setEatFlag(true);
+				}
 			}
+			eatFlag = false;
 		}
 		g.setColor(c);
 	}
@@ -142,10 +146,9 @@ public class Snake {
 			yard.firstSnake = yard.body.get(yard.body.size()-1);
 			yard.firstSnake.lSnake = this;
 			this.fSnake = yard.firstSnake;
-			eatFood = true;
+			eatFlag = true;
 			return true;
 		}
 		else return false;
 	}
-	
 }

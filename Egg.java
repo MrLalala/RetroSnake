@@ -44,10 +44,8 @@ public class Egg {
 		if(!live){
 			int x,y;
 			do{
-				x = rXY.nextInt(Yard.ROWS);
-				System.out.println(x);
-				y = rXY.nextInt(Yard.COLS);
-				System.out.println(y);
+				x = rXY.nextInt(Yard.COLS)+1;
+				y = rXY.nextInt(Yard.ROWS)+1;
 			}while(!reuse(x, y,g));
 			return;
 		}
@@ -64,7 +62,6 @@ public class Egg {
 				return false;
 			}
 		}
-//		temp.draw(g);
 		yard.nowFood = temp;
 		return true;
 	}

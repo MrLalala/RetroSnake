@@ -24,22 +24,22 @@ public class Yard extends Frame {
 	/**
 	 * 院子的行数，默认值为25
 	 */
-	static final int ROWS = 30;
+	static final int ROWS = 20;
 	/**
 	 * 院子的列数,默认值为25
 	 */
-	static final int COLS = 40;
+	static final int COLS = 30;
 	/**
 	 * 默认每个方格的大小
 	 */
 	static final int BLOCK_SIZE = 20;
 	Snake firstSnake = null;
 	static final Color COLOR = Color.gray;
-	Snake s = new Snake(5, 10, this);
-	Snake s2 = new Snake(4, 10);
-	Snake s3 = new Snake(3, 10);
+	Snake s = new Snake(3, 3, this);
+	Snake s2 = new Snake(2, 3);
+	Snake s3 = new Snake(1, 3);
 
-	Egg egg = new Egg(8, 10,this);
+	Egg egg = new Egg(6, 3,this);
 	Egg nowFood = egg;
 	// Image offScreen = null;
 	/**
@@ -51,9 +51,10 @@ public class Yard extends Frame {
 		this.setVisible(true);
 		s.lSnake = s2;
 		s2.fSnake = s;
-		s2.lSnake = s3;
-		s3.fSnake = s2;
-		body.add(s);body.add(s2);body.add(s3);
+//		s2.lSnake = s3;
+//		s3.fSnake = s2;
+		//body.add(s3);
+		body.add(s2);body.add(s);
 		firstSnake = s;
 		this.setBackground(COLOR);
 		this.addWindowListener(new WindowAdapter() {
@@ -86,17 +87,16 @@ public class Yard extends Frame {
 	 */
 	public void update(Graphics g) {
 
-//		if(firstSnake.eatFood){
-//			return;
-//		}
+		
 		firstSnake.draw(g);
+		if(firstSnake.eatFood(nowFood))
+			return;
 		Snake temp = firstSnake;
 		while ((temp = temp.lSnake) != null) {
 			temp.draw(g);
 			temp.setHeadX(temp.fSnake.getTailX());
 			temp.setHeadY(temp.fSnake.getTailY());
 		}
-		firstSnake.eatFood(nowFood);
 		nowFood.draw(g);
 		drawYard(g);
 		}
@@ -118,7 +118,7 @@ public class Yard extends Frame {
 		public void run() {
 			while (true) {
 				try {
-					Thread.sleep(40);
+					Thread.sleep(300);
 				} catch (Exception e) {
 					System.out.print(e.getMessage());
 				}
