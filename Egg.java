@@ -42,6 +42,8 @@ public class Egg {
 	}
 
 	public void draw(Graphics g){
+		if(!live)
+			return;
 		Color color = g.getColor();
 		g.setColor(Color.green);
 		g.fillRect(x*Yard.BLOCK_SIZE, y*Yard.BLOCK_SIZE,Yard.BLOCK_SIZE, Yard.BLOCK_SIZE);
@@ -49,6 +51,6 @@ public class Egg {
 	}
 	
 	public Rectangle getRect(){
-		return new Rectangle(this.x, this.y, Yard.BLOCK_SIZE, Yard.BLOCK_SIZE);
+		return new Rectangle(x*Yard.BLOCK_SIZE, y*Yard.BLOCK_SIZE, Yard.BLOCK_SIZE, Yard.BLOCK_SIZE);
 	}
 }

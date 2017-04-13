@@ -13,7 +13,7 @@ public class Snake {
 	 * 起始位置
 	 */
 	private int headX,headY;
-
+	boolean eatFood = false;
 	public void setHeadY(int headY) {
 		this.headY = headY;
 	}
@@ -38,6 +38,7 @@ public class Snake {
 	 * 移动标记
 	 */
 	private int flag = 0;
+	private Yard yard = null;
 	/**
 	 * 新的蛇的构造函数
 	 * @param x 横坐标
@@ -47,12 +48,20 @@ public class Snake {
 		this.tailX = this.headX = x;
 		this.tailY = this.headY = y+1;
 	}
-	
+
+	public Snake(int x, int y,Yard yard){
+		this(x, y);
+		this.yard = yard;
+	}
+	public Snake(int x, int y,Yard yard,Direction dir){
+		this(x, y, yard);
+		this.dir = dir;
+	}
 	Direction dir = Direction.R;
-	Direction oldDir = Direction.R;
+	Direction oldDir = dir;
 	
 	public void keyPressedEvent(KeyEvent e){
-		if(this.fSnake == null){
+		if(this == yard.firstSnake){
 			oldDir = dir;
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_RIGHT:
@@ -112,6 +121,9 @@ public class Snake {
 		move();
 		if(flag ++ == 10){
 			flag = 0;
+			if(eatFood){
+				eatFood = false;
+			}
 		}
 		g.setColor(c);
 	}
@@ -120,18 +132,20 @@ public class Snake {
 	 * @return
 	 */
 	public Rectangle getRect(){
-		return new Rectangle(headX, headY,Yard.BLOCK_SIZE ,Yard.BLOCK_SIZE);
+		return new Rectangle(Yard.BLOCK_SIZE*headX, Yard.BLOCK_SIZE*headY,Yard.BLOCK_SIZE ,Yard.BLOCK_SIZE);
 	}
 	
-//	public boolean eatFood(Egg e){
-//		if(fSnake == null && e.isLive() && this.getRect().intersects(e.getRect())){
-//			e.setLive(false);
-//			this.fSnake = new Snake(e.getX(),e.getY());
-//			this.fSnake.lSnake = this;
-//			this.fSnake.dir = this.dir;
-//			return true;
-//		}
-//		else return false;
-//	}
+	public boolean eatFood(Egg e){
+		if(this.fSnake == null && e.isLive() &&this.getRect().intersects(e.getRect()) ){
+			e.setLive(false);
+			yard.body.add(new Snake(e.getX(), e.getY()-1,this.yard,this.dir));
+			yard.firstSnake = yard.body.get(yard.body.size()-1);
+			yard.firstSnake.lSnake = this;
+			this.fSnake = yard.firstSnake;
+			eatFood = true;
+			return true;
+		}
+		else return false;
+	}
 	
 }
