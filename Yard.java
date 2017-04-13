@@ -15,7 +15,6 @@ import java.util.ArrayList;
  */
 public class Yard extends Frame {
 
-	
 	ArrayList<Snake> body = new ArrayList<>();
 	/**
 	 * 
@@ -33,15 +32,15 @@ public class Yard extends Frame {
 	 * 默认每个方格的大小
 	 */
 	static final int BLOCK_SIZE = 20;
-	Snake firstSnake = null;
-	static final Color COLOR = Color.gray;
-	Snake s = new Snake(3, 3, this);
-	Snake s2 = new Snake(2, 3);
-	Snake s3 = new Snake(1, 3);
 
-	Egg egg = new Egg(6, 3,this);
-	Egg nowFood = egg;
-	// Image offScreen = null;
+	private boolean isGame = true;
+	private paintThread pt;
+	static final Color COLOR = Color.gray;
+	Snake firstSnake = new Snake(3, 3, this);
+	Snake s2;
+	Snake s3;
+	Egg nowFood;
+
 	/**
 	 * 登录主函数
 	 */
@@ -49,13 +48,17 @@ public class Yard extends Frame {
 		this.setLocation(100, 100);
 		this.setSize((COLS + 3) * (BLOCK_SIZE), (ROWS + 3) * (BLOCK_SIZE));
 		this.setVisible(true);
-		s.lSnake = s2;
-		s2.fSnake = s;
-//		s2.lSnake = s3;
-//		s3.fSnake = s2;
-		//body.add(s3);
-		body.add(s2);body.add(s);
-		firstSnake = s;
+		firstSnake = new Snake(3, 3, this);
+		s2 = new Snake(2, 3);
+		s3 = new Snake(1, 3);
+		nowFood = new Egg(6, 3, this);
+		firstSnake.lSnake = s2;
+		s2.fSnake = firstSnake;
+		s2.lSnake = s3;
+		s3.fSnake = s2;
+		body.add(s3);
+		body.add(s2);
+		body.add(firstSnake);
 		this.setBackground(COLOR);
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -65,10 +68,30 @@ public class Yard extends Frame {
 		this.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				firstSnake.keyPressedEvent(e);
+				if (!isGame && (e.getKeyCode() == KeyEvent.VK_F2)) {
+					isGame = true;
+					reBegin();
+					setBackground(COLOR);
+					repaint();
+				}
 			}
 		});
-		Thread thread = new Thread(new paintThread());
-		thread.start();
+		pt = new paintThread();
+		pt.start();
+	}
+
+	public void reBegin() {
+		firstSnake = new Snake(3, 3, this);
+		s2 = new Snake(2, 3);
+		s3 = new Snake(1, 3);
+		nowFood = new Egg(6, 3, this);
+		firstSnake.lSnake = s2;
+		s2.fSnake = firstSnake;
+		s2.lSnake = s3;
+		s3.fSnake = s2;
+		body.add(s3);
+		body.add(s2);
+		body.add(firstSnake);
 	}
 
 	/**
@@ -86,10 +109,10 @@ public class Yard extends Frame {
 	 * 更新函数
 	 */
 	public void update(Graphics g) {
-
-		
+		if (!isGame)
+			return;
 		firstSnake.draw(g);
-		if(firstSnake.eatFood(nowFood))
+		if (firstSnake.eatFood(nowFood))
 			return;
 		Snake temp = firstSnake;
 		while ((temp = temp.lSnake) != null) {
@@ -99,24 +122,31 @@ public class Yard extends Frame {
 		}
 		nowFood.draw(g);
 		drawYard(g);
+		if (false == (isGame = !firstSnake.testCollision())) {
+			g.drawString("是否重新开始", 200, 300);
+			body.removeAll(body);
 		}
-	
-	public void drawYard(Graphics g){
+	}
+
+	public void drawYard(Graphics g) {
 		for (int i = 1; i <= ROWS + 2; i++)
 			g.drawLine(BLOCK_SIZE, i * BLOCK_SIZE, (COLS + 2) * (BLOCK_SIZE), i * BLOCK_SIZE);
 		for (int i = 1; i <= COLS + 2; i++)
 			g.drawLine(BLOCK_SIZE * i, 2 * BLOCK_SIZE, i * BLOCK_SIZE, (2 + ROWS) * (BLOCK_SIZE));
-	
+
 	}
+
 	/**
 	 * 
 	 * @author Gan
 	 *
 	 */
 
-	private class paintThread implements Runnable {
+	private class paintThread extends Thread {
+		boolean flag = true;
+
 		public void run() {
-			while (true) {
+			while (flag) {
 				try {
 					Thread.sleep(300);
 				} catch (Exception e) {

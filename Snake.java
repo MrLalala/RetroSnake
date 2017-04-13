@@ -151,4 +151,12 @@ public class Snake {
 		}
 		else return false;
 	}
+	
+	public boolean testCollision(){
+		for(int i = 0;i<yard.body.size();i++){
+			if(yard.body.get(i)!=this&&this.getRect().intersects(yard.body.get(i).getRect()))
+				return true;
+		}
+		return false;
+	}
 }
